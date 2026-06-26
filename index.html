@@ -244,8 +244,8 @@ td .meta{color:var(--brown-light);font-size:11px;margin-top:2px}
 
     <div class="row2">
       <div class="field">
-        <label>Order Number</label>
-        <input type="text" id="f_oid" placeholder="WN-2026-0144" autocapitalize="characters" spellcheck="false">
+        <label>Order Number (digits only)</label>
+        <input type="text" id="f_oid" placeholder="e.g. 0144" inputmode="numeric" pattern="[0-9]+" autocomplete="off" spellcheck="false">
       </div>
       <div class="field">
         <label>Access Key</label>
@@ -593,6 +593,7 @@ document.getElementById('btnSaveOrder').addEventListener('click',()=>{
   const key=document.getElementById('f_key').value.trim();
   const cust=document.getElementById('f_cust').value.trim();
   if(!oid){alert('Order number is required');return;}
+  if(!/^\d+$/.test(oid)){alert('Order number must contain digits only (e.g. 0144)');return;}
   if(!key){alert('Access key is required. Click 🎲 Generate.');return;}
   if(!cust){alert('Customer is required');return;}
   // duplicate orderId check (only for new)
@@ -632,6 +633,12 @@ document.getElementById('btnSaveOrder').addEventListener('click',()=>{
 });
 
 document.getElementById('btnNew').addEventListener('click',()=>openEdit(-1));
+
+// strip non-digit chars on input
+document.getElementById('f_oid').addEventListener('input',e=>{
+  const v=e.target.value.replace(/\D/g,'');
+  if(v!==e.target.value) e.target.value=v;
+});
 
 // ════════════════════════════════════════════════════════════════
 // Refresh & Push
